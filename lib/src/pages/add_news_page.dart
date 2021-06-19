@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
-class AddNewsPage extends StatelessWidget {
+import 'package:intl/intl.dart';
+
+class AddNewsPage extends StatefulWidget {
+
+  @override
+  _AddNewsPageState createState() => _AddNewsPageState();
+}
+
+class _AddNewsPageState extends State<AddNewsPage> {
+  
+  final _dateController = TextEditingController();
+  String _date = '';
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +86,18 @@ class AddNewsPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextField(
+                    controller: _dateController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       hintText: 'Date',
                       labelText: 'Date'
                     ),
-                    //onChanged: bloc.changeEmail,
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      _selectDate(context);
+                    }, //onChanged: bloc.changeEmail,
                   ),
+                  
                 )
               ],
             ),
@@ -89,6 +105,24 @@ class AddNewsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+      locale: Locale('es', 'ES')
+    );
+
+    if (picked != null) {
+      setState(() {
+        String formatDate = DateFormat('dd/MM/yyyy').format(picked);
+        _date = formatDate;
+        _dateController.text = _date;
+      });
+    }
   }
 
   void _createNews(BuildContext context) {
