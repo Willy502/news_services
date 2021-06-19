@@ -10,19 +10,26 @@ class NewsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _title(news.title!),
-        SizedBox(height: 8.0),
-        _imageContainer(context),
-        SizedBox(height: 8.0),
-        _dateContainer(context, news.date!),
-        SizedBox(height: 8.0),
-        Divider()
-      ],
+    return GestureDetector(
+      onTap: () => _goToDetail(context, news),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _title(news.title!),
+          SizedBox(height: 8.0),
+          _imageContainer(context),
+          SizedBox(height: 8.0),
+          _dateContainer(context, news.date!),
+          SizedBox(height: 8.0),
+          Divider()
+        ],
+      ),
     );
+  }
+
+  void _goToDetail(BuildContext context, NewsModel news) {
+    Navigator.pushNamed(context, 'detail_news', arguments: news);
   }
 
   Widget _title(String title) {

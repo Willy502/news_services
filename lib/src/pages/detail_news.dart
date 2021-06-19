@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:news/src/models/news_model.dart';
 
 class DetailNewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
 
+    final news = ModalRoute.of(context)!.settings.arguments as NewsModel;
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('News Detail'),
+        title: Text(news.title!),
         actions: [
           IconButton(onPressed: () => _editNews(context), icon: Icon(Icons.edit))
         ],
@@ -21,11 +24,11 @@ class DetailNewsPage extends StatelessWidget {
           height: size.height,
           child: ListView(
             children: [
-              _dateContainer(context),
+              _dateContainer(context, news.date!),
               SizedBox(height: 8.0),
               _topContainer(context),
               SizedBox(height: 16.0),
-              Text('News detail', style: TextStyle(
+              Text(news.description!, style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0
               )),
@@ -36,7 +39,7 @@ class DetailNewsPage extends StatelessWidget {
     );
   }
 
-  Widget _dateContainer(BuildContext context) {
+  Widget _dateContainer(BuildContext context, String date) {
 
     final size = MediaQuery.of(context).size;
 
@@ -45,7 +48,7 @@ class DetailNewsPage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Container()),
-          Text('17/05/2021', style: TextStyle(
+          Text(date, style: TextStyle(
             color: Colors.black
           ))
         ],
