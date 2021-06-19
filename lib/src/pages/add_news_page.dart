@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
 import 'package:news/src/models/news_model.dart';
@@ -19,6 +22,21 @@ class _AddNewsPageState extends State<AddNewsPage> {
   String _date = '';
   NewsModel? news;
   bool alreadyAsigned = false;
+
+  // Camera
+  File? _image;
+  final picker = ImagePicker();
+
+  Future _getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      print("No image selected.");
+    }
+    setState(() {});
+  }
 
   final _newsProvider = NewsProvider();
 
@@ -84,12 +102,16 @@ class _AddNewsPageState extends State<AddNewsPage> {
       width: size.width,
       child: Row(
         children: [
-          Container(
-            height: size.width/3,
-            width: size.width/3,
-            decoration: BoxDecoration(
-              color: Colors.green
+          GestureDetector(
+            child: Container(
+              child: _image == null ? null : Image.file(_image!),
+              height: size.width/3,
+              width: size.width/3,
+              decoration: BoxDecoration(
+                color: Colors.green
+              ),
             ),
+            onTap: () => _getImage(),
           ),
           Expanded(
             child: Column(
@@ -173,6 +195,11 @@ class _AddNewsPageState extends State<AddNewsPage> {
     if (description == '') {
       _errorDescription = 'Campo Obligatorio';
       fully = false;
+    }
+
+    if (_image == null) {
+      fully = false;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Missing Image')));
     }
 
     setState(() {});
