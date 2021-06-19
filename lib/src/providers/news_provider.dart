@@ -19,4 +19,26 @@ class NewsProvider {
     return true;
   }
 
+  Future<List<NewsModel>> loadNews() async {
+    final url = Uri.https(_baseUrl, '/news.json', {
+      'auth' : _preferences.token
+    });
+
+    final resp = await http.get(url);
+
+    final Map<String, dynamic>? decodedData = json.decode(resp.body);
+    final List<NewsModel> news = [];
+
+    if (decodedData == null) return [];
+    if (decodedData['error'] != null) return [];
+
+    decodedData.forEach((id, internalNews) {
+      final newsTemp = NewsModel.fromJson(internalNews);
+      newsTemp.id = id;
+      news.add(newsTemp);
+    });
+
+    return news;
+  }
+
 }

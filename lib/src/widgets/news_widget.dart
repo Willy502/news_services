@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news/src/models/news_model.dart';
 
 class NewsWidget extends StatelessWidget {
+
+  final NewsModel news;
+
+  NewsWidget({required this.news});
 
   @override
   Widget build(BuildContext context) {
@@ -9,19 +14,19 @@ class NewsWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _title(),
+        _title(news.title!),
         SizedBox(height: 8.0),
         _imageContainer(context),
         SizedBox(height: 8.0),
-        _dateContainer(context),
+        _dateContainer(context, news.date!),
         SizedBox(height: 8.0),
         Divider()
       ],
     );
   }
 
-  Widget _title() {
-    return Text('News Title', style: TextStyle(
+  Widget _title(String title) {
+    return Text(title, style: TextStyle(
       fontSize: 18.0,
       color: Colors.black,
       fontWeight: FontWeight.bold
@@ -40,7 +45,7 @@ class NewsWidget extends StatelessWidget {
     );
   }
 
-  Widget _dateContainer(BuildContext context) {
+  Widget _dateContainer(BuildContext context, String date) {
     final size = MediaQuery.of(context).size;
 
     return Container(
@@ -48,7 +53,7 @@ class NewsWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Container()),
-          Text('17/05/2021', style: TextStyle(
+          Text(date, style: TextStyle(
             color: Colors.black
           ))
         ],
