@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
 
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +62,7 @@ class LoginPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
+        controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
@@ -75,6 +79,7 @@ class LoginPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
+        controller: _passwordController,
         obscureText: true,
         decoration: InputDecoration(
           icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
@@ -91,9 +96,26 @@ class LoginPage extends StatelessWidget {
       child: Container(
         child: Text('Ingresar'),
       ),
-      onPressed: () => {
-        Navigator.pushReplacementNamed(context, 'news')
-      },
+      onPressed: () => _loginPressed(context),
     );
+  }
+
+  bool _validateFields() {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    if (email == '' || password == '') {
+      return false;
+    }
+    return true;
+  }
+
+  void _loginPressed(BuildContext context) {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    if (_validateFields()) {
+      Navigator.pushReplacementNamed(context, 'news');
+    }
   }
 }
