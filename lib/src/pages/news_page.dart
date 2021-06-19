@@ -33,7 +33,7 @@ class NewsPage extends StatelessWidget {
   }
 
   void _addNews(BuildContext context) {
-    Navigator.pushNamed(context, 'detail_news');
+    Navigator.pushNamed(context, 'add_news');
   }
 
   void _logout(BuildContext context) {
