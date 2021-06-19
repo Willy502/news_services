@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:news/src/shared/preferences.dart';
 import 'package:news/src/widgets/news_widget.dart';
 
 class NewsPage extends StatelessWidget {
+
+  final preferences = Preferences();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class NewsPage extends StatelessWidget {
   }
 
   void _logout(BuildContext context) {
+    preferences.token = '';
     Navigator.pushReplacementNamed(context, 'login');
   }
 }

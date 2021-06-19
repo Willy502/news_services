@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:news/src/routes/routes.dart';
+import 'package:news/src/shared/preferences.dart';
  
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final preferences = Preferences();
+  await preferences.initPreferences();
   return runApp(MyApp());
 }
  

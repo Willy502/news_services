@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news/src/providers/login_provider.dart';
 
 class LoginPage extends StatelessWidget {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final loginProvider = LoginProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,7 @@ class LoginPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
+        autocorrect: false,
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
@@ -79,6 +82,7 @@ class LoginPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: TextField(
+        autocorrect: false,
         controller: _passwordController,
         obscureText: true,
         decoration: InputDecoration(
@@ -110,12 +114,16 @@ class LoginPage extends StatelessWidget {
     return true;
   }
 
-  void _loginPressed(BuildContext context) {
+  void _loginPressed(BuildContext context) async {
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
     if (_validateFields()) {
-      Navigator.pushReplacementNamed(context, 'news');
+      bool logued = await loginProvider.createAccount(email: email, password: password);
+      if (logued) {
+        Navigator.pushReplacementNamed(context, 'news');
+      }
+      
     }
   }
 }
