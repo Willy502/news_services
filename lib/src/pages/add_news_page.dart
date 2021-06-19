@@ -17,17 +17,31 @@ class _AddNewsPageState extends State<AddNewsPage> {
   final _descriptionController = TextEditingController();
   String? _errorDescription, _errorTitle, _errorDate;
   String _date = '';
+  NewsModel? news;
+  bool alreadyAsigned = false;
 
   final _newsProvider = NewsProvider();
 
   @override
   Widget build(BuildContext context) {
 
+    news = ModalRoute.of(context)!.settings.arguments as NewsModel?;
+
+    var title = 'Create News';
+    if (!alreadyAsigned) {
+      title = news != null ? news!.title! : 'Create News';
+      _titleController.text = news != null ? news!.title! : "";
+      _dateController.text = news != null ? news!.date! : "";
+      _descriptionController.text = news != null ? news!.description! : "";
+      alreadyAsigned = true;
+    }
+    
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create News'),
+        title: Text(title),
         actions: [
           IconButton(onPressed: () => _createNews(context), icon: Icon(Icons.check))
         ],
@@ -173,13 +187,19 @@ class _AddNewsPageState extends State<AddNewsPage> {
     String description = _descriptionController.text;
 
     if (_validateFields()) {
-      final news = NewsModel();
-      news.date = date;
-      news.title = title;
-      news.description = description;
+      var newsTemp = news != null ? news! : NewsModel();
+      newsTemp.date = date;
+      newsTemp.title = title;
+      newsTemp.description = description;
 
-      if (await _newsProvider.createNews(news: news)) {
-        Navigator.pop(context);
+      if (news != null) {
+        if (await _newsProvider.updateNews(news: newsTemp)) {
+          Navigator.popUntil(context, ModalRoute.withName('news'));
+        }
+      } else {
+        if (await _newsProvider.createNews(news: newsTemp)) {
+          Navigator.pop(context);
+        }
       }
       
     }

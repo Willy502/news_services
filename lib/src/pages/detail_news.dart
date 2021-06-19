@@ -14,7 +14,7 @@ class DetailNewsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(news.title!),
         actions: [
-          IconButton(onPressed: () => _editNews(context), icon: Icon(Icons.edit))
+          IconButton(onPressed: () => _editNews(context, news), icon: Icon(Icons.edit))
         ],
       ),
       body: Container(
@@ -69,7 +69,7 @@ class DetailNewsPage extends StatelessWidget {
     );
   }
 
-  void _editNews(BuildContext context) {
-    Navigator.pushNamed(context, 'add_news');
+  void _editNews(BuildContext context, NewsModel news) {
+    Navigator.pushNamed(context, 'add_news', arguments: news);
   }
 }

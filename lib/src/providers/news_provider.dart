@@ -19,6 +19,17 @@ class NewsProvider {
     return true;
   }
 
+  Future<bool> updateNews({required NewsModel news}) async {
+    final url = Uri.https(_baseUrl, '/news/${news.id}.json', {
+      'auth' : _preferences.token
+    });
+
+    final resp = await http.put(url, body: newsModelToJson(news));
+    final decodedData = json.decode(resp.body);
+    print(decodedData);
+    return true;
+  }
+
   Future<List<NewsModel>> loadNews() async {
     final url = Uri.https(_baseUrl, '/news.json', {
       'auth' : _preferences.token
