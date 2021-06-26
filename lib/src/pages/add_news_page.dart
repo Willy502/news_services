@@ -130,6 +130,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextField(
                     controller: _titleController,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       hintText: 'Title',
