@@ -18,6 +18,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
   final _dateController = TextEditingController();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  String? _imageUrl;
   String? _errorDescription, _errorTitle, _errorDate;
   String _date = '';
   NewsModel? news;
@@ -51,6 +52,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
       _titleController.text = news != null ? news!.title! : "";
       _dateController.text = news != null ? news!.date! : "";
       _descriptionController.text = news != null ? news!.description! : "";
+      _imageUrl = news != null ? news!.imgUrl! : null;
       alreadyAsigned = true;
     }
     
@@ -71,7 +73,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
           height: size.height,
           child: ListView(
             children: [
-              _topContainer(context),
+              _topContainer(context, _imageUrl),
               SizedBox(height: 16.0),
               TextField(
                 controller: _descriptionController,
@@ -94,9 +96,16 @@ class _AddNewsPageState extends State<AddNewsPage> {
     );
   }
 
-  Widget _topContainer(BuildContext context) {
+  Widget _topContainer(BuildContext context, String? imageUrl) {
 
     final size = MediaQuery.of(context).size;
+
+    Widget? imageWidget;
+    if (_image != null) {
+      imageWidget = _image == null ? null : Image.file(_image!, fit: BoxFit.cover);
+    } else if (imageUrl != null) {
+      imageWidget = Image(image: NetworkImage(imageUrl), fit: BoxFit.cover);
+    }
 
     return Container(
       width: size.width,
@@ -104,7 +113,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
         children: [
           GestureDetector(
             child: Container(
-              child: _image == null ? null : Image.file(_image!),
+              child: imageWidget,
               height: size.width/3,
               width: size.width/3,
               decoration: BoxDecoration(
@@ -197,7 +206,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
       fully = false;
     }
 
-    if (_image == null) {
+    if (_image == null && news == null) {
       fully = false;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Missing Image')));
     }
@@ -218,6 +227,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
       newsTemp.date = date;
       newsTemp.title = title;
       newsTemp.description = description;
+      if (_image != null) newsTemp.imgUrl = await _newsProvider.uploadPicture(image: _image!);
 
       if (news != null) {
         if (await _newsProvider.updateNews(news: newsTemp)) {

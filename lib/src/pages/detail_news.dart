@@ -26,7 +26,7 @@ class DetailNewsPage extends StatelessWidget {
             children: [
               _dateContainer(context, news.date!),
               SizedBox(height: 8.0),
-              _topContainer(context),
+              _topContainer(context, news.imgUrl!),
               SizedBox(height: 16.0),
               Text(news.description!, style: TextStyle(
                 color: Colors.black,
@@ -56,7 +56,7 @@ class DetailNewsPage extends StatelessWidget {
     );
   }
 
-  Widget _topContainer(BuildContext context) {
+  Widget _topContainer(BuildContext context, String imageUrl) {
 
     final size = MediaQuery.of(context).size;
 
@@ -65,7 +65,8 @@ class DetailNewsPage extends StatelessWidget {
       height: size.width - 32.0,
       decoration: BoxDecoration(
         color: Colors.green
-      )
+      ),
+      child: Image(image: NetworkImage(imageUrl), fit: BoxFit.cover)
     );
   }
 
